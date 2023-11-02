@@ -1,0 +1,18 @@
+name: Lint
+
+on: [pull_request]
+
+jobs:
+    build:
+        name: Lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '16.x'
+                  registry-url: 'https://registry.npmjs.org'
+                  cache: yarn
+                  cache-dependency-path: './yarn.lock'
+            - run: yarn install
+            - run: yarn run lint
