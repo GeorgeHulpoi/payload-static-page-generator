@@ -2,6 +2,14 @@
 	"name": "payload-static-page-generator",
 	"version": "2.0.0-alpha.0",
 	"description": "A plugin that helps you generate static pages and regenerate them when needed. Very useful for SPA with server-side rendering.",
+	"homepage": "https://github.com/gvhdev/payload-static-page-generator",
+	"bugs": {
+		"url": "https://github.com/gvhdev/payload-static-page-generator/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/gvhdev/payload-static-page-generator.git"
+	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"keywords": [
