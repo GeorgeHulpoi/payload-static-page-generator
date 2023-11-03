@@ -32,17 +32,29 @@ describe('StaticPageGenerator', () => {
 
 	it('StaticPage.list should be populated', () => {
 		expect(StaticPage.list.size).toEqual(3);
-		expect(StaticPage.list.has('/')).toBeTruthy();
-		expect(StaticPage.list.has('/about-us')).toBeTruthy();
-		expect(StaticPage.list.has('/contact')).toBeTruthy();
+		expect(StaticPage.list.has('')).toBeTruthy();
+		expect(StaticPage.list.has('about-us')).toBeTruthy();
+		expect(StaticPage.list.has('contact')).toBeTruthy();
 	});
 
 	it('generateFn should be called 3 times', () => {
 		expect(generateFn).toHaveBeenCalledTimes(3);
 
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/'), false);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/about-us'), false);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/contact'), false);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), false);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), false);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), false);
+	});
+
+	it('StaticPage.regenerateAll should regenerate all pages', async () => {
+		generateFn.mockReset();
+
+		StaticPage.regenerateAll();
+
+		expect(generateFn).toHaveBeenCalledTimes(3);
+
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), true);
 	});
 
 	it('update on resource should call generate function with regeneration', async () => {
@@ -57,7 +69,7 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/'), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
 	});
 
 	it('should regenerate all pages when update is related to layout', async () => {
@@ -73,9 +85,9 @@ describe('StaticPageGenerator', () => {
 
 		expect(generateFn).toHaveBeenCalledTimes(3);
 
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/'), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/about-us'), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/contact'), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), true);
 	});
 
 	it('update on dependency should call generate function with regeneration', async () => {
@@ -90,12 +102,12 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/about-us'), true);
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
 	});
 
 	it('deletion on resource should call deleteFn', async () => {
 		deleteFn.mockReset();
-		const staticPage = StaticPage.list.get('/contact');
+		const staticPage = StaticPage.list.get('contact');
 
 		await payload.delete({
 			collection: Pages.slug,
@@ -106,8 +118,8 @@ describe('StaticPageGenerator', () => {
 		expect(deleteFn).toHaveBeenCalledWith(staticPage);
 
 		expect(StaticPage.list.size).toEqual(2);
-		expect(StaticPage.list.has('/')).toBeTruthy();
-		expect(StaticPage.list.has('/about-us')).toBeTruthy();
+		expect(StaticPage.list.has('')).toBeTruthy();
+		expect(StaticPage.list.has('about-us')).toBeTruthy();
 	});
 
 	it('creation should create a Static Page', async () => {
@@ -125,7 +137,7 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('/test/page'), false);
-		expect(StaticPage.list.has('/test/page')).toBeTruthy();
+		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('test/page'), false);
+		expect(StaticPage.list.has('test/page')).toBeTruthy();
 	});
 });

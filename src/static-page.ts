@@ -52,7 +52,7 @@ export class StaticPageBuilder {
 	}
 
 	build(): StaticPage {
-		if (!this.path) {
+		if (this.path === undefined || this.path === null) {
 			throw new Error("You can't build a StaticPage without using a path.");
 		}
 
@@ -126,6 +126,17 @@ export class StaticPage {
 		this.canDelete = canDelete;
 
 		StaticPage.list.set(path, this);
+	}
+
+	/**
+	 * Regenerate all pages
+	 */
+	static regenerateAll(): Promise<void> {
+		const regenerate$: Array<void | Promise<void>> = [];
+		StaticPage.list.forEach((staticPage) => {
+			regenerate$.push(StaticPage.generate(staticPage, true));
+		});
+		return Promise.all(regenerate$).then();
 	}
 
 	/**

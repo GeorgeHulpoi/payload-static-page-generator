@@ -54,7 +54,7 @@ const canRegenerate = ({ event, staticPage, dependencyGraph }) => {
 
 const canDelete = ({ event, staticPage }) => {
 	if (event.type === 'delete' && event.collection === Pages.slug) {
-		const path = event.doc.path === 'home' ? '/' : `/${event.doc.path}`;
+		const path = event.doc.path === 'home' ? '' : event.doc.path;
 
 		return staticPage.path === path;
 	} else return false;
@@ -89,7 +89,7 @@ export default buildConfig({
 				});
 
 				for (let doc of result.docs) {
-					const path = doc.path === 'home' ? '/' : `/${doc.path}`;
+					const path = doc.path === 'home' ? '' : (doc.path as string);
 					const staticPage = new StaticPage(
 						path,
 						new DependencyGraphResourceSet().add({
@@ -105,7 +105,7 @@ export default buildConfig({
 			},
 			onDependencyGraphEvent: async ({ event, dependencyGraph }) => {
 				if (event.type === 'create' && event.collection === Pages.slug) {
-					const path = event.doc.path === 'home' ? '/' : `/${event.doc.path}`;
+					const path = event.doc.path === 'home' ? '' : event.doc.path;
 
 					const staticPage = new StaticPage(
 						path,
