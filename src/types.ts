@@ -60,6 +60,10 @@ export interface OnDependencyGraphEventArgs {
 
 export interface PluginConfig {
 	/**
+	 * Controls whether the plugin is active or not.
+	 */
+	enabled?: boolean;
+	/**
 	 * When the plugin initializes, this function is called. It is preferable in this function to generate the static pages.
 	 * @returns `void | Promise<void>`
 	 */

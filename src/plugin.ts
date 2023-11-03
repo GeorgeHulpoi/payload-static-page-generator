@@ -7,10 +7,22 @@ import type { PluginConfig } from './types';
 export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 	(pluginConfig: PluginConfig) =>
 	(incomingConfig: Config): Config => {
+		const {
+			enabled = true,
+			onInit: pluginOnInit,
+			generate: generateFn,
+			delete: deleteFn,
+			onDependencyGraphEvent,
+		} = pluginConfig;
+
+		if (!enabled) {
+			return incomingConfig;
+		}
+
 		const { onInit, ...restOfConfig } = incomingConfig;
 
-		StaticPage.generate = pluginConfig.generate;
-		StaticPage.delete = pluginConfig.delete;
+		StaticPage.generate = generateFn;
+		StaticPage.delete = deleteFn;
 
 		return {
 			onInit: async (payload) => {
@@ -18,13 +30,13 @@ export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 					await onInit(payload);
 				}
 
-				await pluginConfig.onInit(payload);
+				await pluginOnInit(payload);
 
 				const dependencyGraph = DependencyGraphService.dependencyGraph!;
 
 				// eslint-disable-next-line consistent-return
 				DependencyGraphService.subscribe(async (event) => {
-					const cond = await pluginConfig.onDependencyGraphEvent({
+					const cond = await onDependencyGraphEvent({
 						event,
 						payload,
 						dependencyGraph,
