@@ -134,7 +134,13 @@ export class StaticPage {
 	static regenerateAll(): Promise<void> {
 		const regenerate$: Array<void | Promise<void>> = [];
 		StaticPage.list.forEach((staticPage) => {
-			regenerate$.push(StaticPage.generate(staticPage, true));
+			regenerate$.push(
+				StaticPage.generate({
+					page: staticPage,
+					regenerate: true,
+					inBulk: true,
+				}),
+			);
 		});
 		return Promise.all(regenerate$).then();
 	}
@@ -171,7 +177,11 @@ export class StaticPage {
 		});
 
 		if (canRegenerateResult) {
-			await StaticPage.generate(this, true);
+			await StaticPage.generate({
+				page: this,
+				regenerate: true,
+				inBulk: false,
+			});
 		}
 	}
 
