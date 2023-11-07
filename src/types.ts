@@ -28,12 +28,25 @@ export interface ActionCallbackArgs {
 
 /**
  * The function that generates the HTML Content for the page and stores it.
- *
- * @param page - The instance of {@link StaticPage | Static Page} that you have to (re)generate.
- * @param regenerate - By default, you shouldn't generate HTML content if there is already a file with it. This parameter forces to update it.
- * @returns `void | Promise<void>`
  */
-export type GenerateFunction = (page: StaticPage, regenerate: boolean) => void | Promise<void>;
+export type GenerateFunction = (args: GenerateFunctionArgs) => void | Promise<void>;
+
+export interface GenerateFunctionArgs {
+	/**
+	 * The instance of {@link StaticPage | Static Page} that you have to (re)generate.
+	 */
+	page: StaticPage;
+
+	/**
+	 * By default, you shouldn't generate HTML content if there is already a file with it. This parameter forces to update it.
+	 */
+	regenerate: boolean;
+
+	/**
+	 *  If the regeneration is part of a bulk. Useful if you're invalidating multiple items at once.
+	 */
+	inBulk: boolean;
+}
 
 /**
  * The function that deletes the file that stores the HTML content for the Static Page.

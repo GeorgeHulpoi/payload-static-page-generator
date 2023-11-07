@@ -40,9 +40,27 @@ describe('StaticPageGenerator', () => {
 	it('generateFn should be called 3 times', () => {
 		expect(generateFn).toHaveBeenCalledTimes(3);
 
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), false);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), false);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), false);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get(''),
+				regenerate: false,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('about-us'),
+				regenerate: false,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('contact'),
+				regenerate: false,
+				inBulk: true,
+			}),
+		);
 	});
 
 	it('StaticPage.regenerateAll should regenerate all pages', async () => {
@@ -52,9 +70,27 @@ describe('StaticPageGenerator', () => {
 
 		expect(generateFn).toHaveBeenCalledTimes(3);
 
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), true);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get(''),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('about-us'),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('contact'),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
 	});
 
 	it('update on resource should call generate function with regeneration', async () => {
@@ -69,7 +105,13 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get(''),
+				regenerate: true,
+				inBulk: false,
+			}),
+		);
 	});
 
 	it('should regenerate all pages when update is related to layout', async () => {
@@ -85,9 +127,27 @@ describe('StaticPageGenerator', () => {
 
 		expect(generateFn).toHaveBeenCalledTimes(3);
 
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get(''), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('contact'), true);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get(''),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('about-us'),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('contact'),
+				regenerate: true,
+				inBulk: true,
+			}),
+		);
 	});
 
 	it('update on dependency should call generate function with regeneration', async () => {
@@ -102,7 +162,13 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('about-us'), true);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('about-us'),
+				regenerate: true,
+				inBulk: false,
+			}),
+		);
 	});
 
 	it('deletion on resource should call deleteFn', async () => {
@@ -137,7 +203,13 @@ describe('StaticPageGenerator', () => {
 		});
 
 		expect(generateFn).toHaveBeenCalledTimes(1);
-		expect(generateFn).toHaveBeenCalledWith(StaticPage.list.get('test/page'), false);
+		expect(generateFn).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: StaticPage.list.get('test/page'),
+				regenerate: false,
+				inBulk: false,
+			}),
+		);
 		expect(StaticPage.list.has('test/page')).toBeTruthy();
 	});
 });

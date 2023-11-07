@@ -17,14 +17,8 @@ import { seed } from './seed';
 import { Pages } from './collections/Pages';
 import Layout from './globals/Layout';
 
-export const generateFn = jest.fn((page: StaticPage, regenerate: boolean) => {});
+export const generateFn = jest.fn((args: any) => {});
 export const deleteFn = jest.fn((page: StaticPage) => {});
-
-const regenerateAllPages = () => {
-	StaticPage.list.forEach((sp) => {
-		StaticPage.generate(sp, true);
-	});
-};
 
 const canRegenerate = ({ event, staticPage, dependencyGraph }) => {
 	if (event.type === 'update') {
@@ -100,7 +94,11 @@ export default buildConfig({
 						canDelete,
 					);
 
-					StaticPage.generate(staticPage, false);
+					StaticPage.generate({
+						page: staticPage,
+						regenerate: false,
+						inBulk: true,
+					});
 				}
 			},
 			onDependencyGraphEvent: async ({ event, dependencyGraph }) => {
@@ -117,12 +115,16 @@ export default buildConfig({
 						canDelete,
 					);
 
-					await StaticPage.generate(staticPage, false);
+					await StaticPage.generate({
+						page: staticPage,
+						regenerate: false,
+						inBulk: false,
+					});
 					return false;
 				}
 
 				if (event.global === Layout.slug && event.type === 'update') {
-					regenerateAllPages();
+					await StaticPage.regenerateAll();
 					return false;
 				}
 
@@ -143,7 +145,7 @@ export default buildConfig({
 					if (isDependency) {
 						const e = event as UpdateEvent;
 						if (e.previousDoc.title !== e.doc.title) {
-							regenerateAllPages();
+							await StaticPage.regenerateAll();
 							return false;
 						}
 					}
