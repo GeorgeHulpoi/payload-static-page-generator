@@ -1,5 +1,6 @@
 import type { Payload } from 'payload';
 import type { DependencyGraphBase, Event } from 'payload-dependency-graph';
+import type { PayloadHandler } from 'payload/config';
 import type { StaticPage } from './static-page';
 
 /**
@@ -71,11 +72,36 @@ export interface OnDependencyGraphEventArgs {
 	dependencyGraph: DependencyGraphBase;
 }
 
+export interface RegenerateAllStaticPagesEndpoint {
+	/**
+	 * The path of the endpoint.
+	 * @default `/api/regenerate-all-static-pages`
+	 */
+	path?: string;
+	/**
+	 * The method of the endpoint.
+	 * @default `get`
+	 */
+	method?: 'connect' | 'delete' | 'get' | 'head' | 'options' | 'patch' | 'post' | 'put';
+	/**
+	 * Add more handlers before the static pages are regenerated. Useful to add a layer of security.
+	 */
+	preHandler?: PayloadHandler[];
+	/**
+	 * Add more handlers after the static pages are regenerated. Useful to send a response to the user.
+	 */
+	postHandler?: PayloadHandler[];
+}
+
 export interface PluginConfig {
 	/**
 	 * Controls whether the plugin is active or not.
 	 */
 	enabled?: boolean;
+	/**
+	 * Implements an endpoint that regenerates all static pages.
+	 */
+	regenerateAllStaticPagesEndpoint?: RegenerateAllStaticPagesEndpoint;
 	/**
 	 * When the plugin initializes, this function is called. It is preferable in this function to generate the static pages.
 	 * @returns `void | Promise<void>`

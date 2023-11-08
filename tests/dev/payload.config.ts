@@ -16,9 +16,7 @@ import globals from './globals';
 import { seed } from './seed';
 import { Pages } from './collections/Pages';
 import Layout from './globals/Layout';
-
-export const generateFn = jest.fn((args: any) => {});
-export const deleteFn = jest.fn((page: StaticPage) => {});
+import { deleteFn, generateFn, postHandler, preHandler } from './mocks/funcs';
 
 const canRegenerate = ({ event, staticPage, dependencyGraph }) => {
 	if (event.type === 'update') {
@@ -74,6 +72,10 @@ export default buildConfig({
 	plugins: [
 		DependencyGraphPlugin(),
 		StaticPageGeneratorPlugin({
+			regenerateAllStaticPagesEndpoint: {
+				preHandler: [preHandler],
+				postHandler: [postHandler],
+			},
 			onInit: async (payload: Payload) => {
 				let result = await payload.find({
 					collection: Pages.slug,

@@ -3,6 +3,7 @@ import type { Config, Plugin } from 'payload/config';
 import { DependencyGraphService } from 'payload-dependency-graph';
 import { StaticPage } from './static-page';
 import type { PluginConfig } from './types';
+import regenerateAllStaticPagesEndpoint from './endpoint';
 
 export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 	(pluginConfig: PluginConfig) =>
@@ -19,10 +20,19 @@ export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 			return incomingConfig;
 		}
 
-		const { onInit, ...restOfConfig } = incomingConfig;
+		const { onInit, endpoints, ...restOfConfig } = incomingConfig;
 
 		StaticPage.generate = generateFn;
 		StaticPage.delete = deleteFn;
+
+		let newEndpoints = endpoints;
+
+		if (pluginConfig.regenerateAllStaticPagesEndpoint !== undefined) {
+			newEndpoints = [
+				...(endpoints || []),
+				regenerateAllStaticPagesEndpoint(pluginConfig.regenerateAllStaticPagesEndpoint),
+			];
+		}
 
 		return {
 			onInit: async (payload) => {
@@ -59,6 +69,7 @@ export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 					}
 				});
 			},
+			endpoints: newEndpoints,
 			...restOfConfig,
 		};
 	};
