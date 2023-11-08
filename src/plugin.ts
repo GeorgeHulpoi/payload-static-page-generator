@@ -1,9 +1,9 @@
 import type { Config, Plugin } from 'payload/config';
 
 import { DependencyGraphService } from 'payload-dependency-graph';
+import { regenerateAllStaticPagesEndpoint } from './endpoint';
 import { StaticPage } from './static-page';
 import type { PluginConfig } from './types';
-import regenerateAllStaticPagesEndpoint from './endpoint';
 
 export const StaticPageGeneratorPlugin: (pluginConfig: PluginConfig) => Plugin =
 	(pluginConfig: PluginConfig) =>

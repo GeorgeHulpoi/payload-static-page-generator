@@ -3,9 +3,9 @@ import { type Endpoint, type PayloadHandler } from 'payload/config';
 import type { RegenerateAllStaticPagesEndpoint } from './types';
 import { StaticPage } from './static-page';
 
-const regenerateAllStaticPagesEndpoint: (config: RegenerateAllStaticPagesEndpoint) => Endpoint = (
-	config,
-) => {
+export const regenerateAllStaticPagesEndpoint: (
+	config: RegenerateAllStaticPagesEndpoint,
+) => Endpoint = (config) => {
 	const handler: PayloadHandler[] = [];
 
 	if (config.preHandler !== undefined && config.preHandler.length > 0) {
@@ -28,5 +28,3 @@ const regenerateAllStaticPagesEndpoint: (config: RegenerateAllStaticPagesEndpoin
 		handler,
 	};
 };
-
-export default regenerateAllStaticPagesEndpoint;
