@@ -4,10 +4,10 @@ import path from 'path';
 
 import { start } from './dev/server';
 import { StaticPage } from '../src/static-page';
-import { deleteFn, generateFn } from './dev/payload.config';
 import { type Payload } from 'payload';
 import { Pages } from './dev/collections/Pages';
 import { Media } from './dev/collections/Media';
+import { deleteFn, generateFn } from './dev/mocks/funcs';
 
 describe('StaticPageGenerator', () => {
 	let mongod: MongoMemoryServer;
@@ -20,7 +20,7 @@ describe('StaticPageGenerator', () => {
 		process.env.PAYLOAD_CONFIG_PATH = path.join(__dirname, 'dev', 'payload.config.ts');
 		process.env.MONGODB_URI = mongod.getUri();
 
-		const result = await start();
+		const result = await start(true);
 		server = result.server;
 		payload = result.payload;
 	});

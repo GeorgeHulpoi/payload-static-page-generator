@@ -4,23 +4,22 @@ import payload, { type Payload } from 'payload';
 
 const app = express();
 
-export const start = async (): Promise<{
+export const start = async (
+	local: boolean,
+): Promise<{
 	server: Server;
 	payload: Payload;
+	app: express.Express;
 }> => {
 	await payload.init({
-		local: true,
+		local,
 		secret: 'here-is-a-secret',
 		express: app,
 	});
 
 	return {
+		app,
 		server: app.listen(3000),
 		payload,
 	};
 };
-
-// when build.js is launched directly
-if (module.id === require.main?.id) {
-	start();
-}
